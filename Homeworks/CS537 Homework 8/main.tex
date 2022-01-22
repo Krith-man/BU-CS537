@@ -1,0 +1,155 @@
+\documentclass[11pt]{537homework}
+
+% For including image files
+\usepackage{graphicx}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+\algnewcommand{\IIf}[1]{\State\algorithmicif\ #1\ \algorithmicthen}
+\algnewcommand{\EndIIf}{\unskip\ \algorithmicend\ \algorithmicif}
+\usepackage{blindtext}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{amsmath}
+% set the vertical spacing between paragraphs
+\setlength{\parskip}{1.5mm}
+
+% For fancy math
+\RequirePackage{amsmath,amsthm,amssymb}
+\newtheorem{theorem}{Theorem}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{claim}[theorem]{Claim}
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\newcommand{\ord}[2][th]{\ensuremath{{#2}^{\mathrm{#1}}}}
+% shorthand for \mathcal{O}
+\newcommand{\Ocal}{\ensuremath{\mathcal{O}}}
+
+
+% homework number
+\hwnumber{2}
+% your name
+\author{Emmanouil Kritharakis}
+% Collaborators. If you didn't collaborate, write "\collaborators{none}".
+% If you did, for each collaborator, write "worked together", "I helped him/her" or "He/ she helped me".
+\collaborators{Eric Munson, Aneesh Raman, Piotr Teterwak (Work together)}  
+
+\begin{document}
+\section{Poisson approximation}
+
+
+% If the problem has multiple parts, use \subsection command.
+\subsection{}
+We assume that each ball is unique(each one holds a unique identifier), so the total number of different orders to put $3\cdot n$ balls in n bins are the permutation of them, so $(3 \cdot n)!$. In this case, we care only for those different orders that a bin receives an exact triplet of balls in it. The total number of those is $(3!)^n$, since we care about all the exact 3-way permutations that could happen in each one of those n bins. So, the total number of different orders in our case is $\displaystyle{\frac{(3\cdot n)!}{(3!)^n}}$. In addiction, the probability that one of those $\displaystyle{\frac{(3\cdot n)!}{(3!)^n}}$ different orders is chosen given that we pick a ball uniformly and independently is $(\frac{1}{n})^{3n}$. So, the requested probability is:
+\begin{align*}
+p_1 =  \displaystyle{\frac{(3\cdot n)!}{(3!)^n} \cdot (\frac{1}{n})^{3n}}
+\end{align*}
+\subsection{}
+We define $Y_i$ as the total number of balls $i^{th}$ bin received. In "Poisson world" $Y_i \sim Poisson(\mu)$, where $\mu = \frac{3\cdot n}{n} = 3$,so $Y_i \sim Poisson(\3)$. Given that by definition $Pr[Y_i = 3] = \frac{e^{-3} \cdot 3^3}{3!} = \frac{e^{-3} \cdot 3^2}{2} $ and all the $Y_i$ are mutually independent we imply that:
+\begin{align*}
+p_2 =  (Pr[Y_i = 3])^n = (\frac{e^{-3} \cdot 3^2}{2})^n = \frac{e^{-3 \cdot n} \cdot 3^{2\cdot n}}{2^n}
+\end{align*}
+\subsection{}
+Based on results from subquestions (a) and (b) we can easily imply that:
+\begin{equation}
+\frac{p_2}{p_1} =  \frac{\frac{e^{-3 \cdot n} \cdot 3^{2\cdot n}}{2^n}}{\frac{(3\cdot n)!}{(3!)^n} \cdot (\frac{1}{n})^{3n}} = \displaystyle{\frac{3^{-3n} \cdot (3n)^{3n}}{(3n)!}} 
+\end{equation}
+Using the definition of Poisson probability we have from equation (1) that $\displaystyle{Pr[Y_i = 3n] = \frac{e^{-3n} \cdot 3^{3n}}{(3n)!}} = \frac{p_2}{p_1}$
+
+\subsection{}
+The theorem 5.6 refers that: "\textit{The distribution of $(Y_1^{(m)},...,Y_n^{(m)})$ conditioned on $\sum_{i}^{} Y_i^{(m)} = k$ is the same as ($X_1^(m),...,X_n^{(m)})$, regardless of the value of m.}". 
+\par In our case, $k = 3n$. We define as $X_i$ the binomial random variable of having exactly 3 balls in $i^{th}$ bin. So we can easily imply that based on subquestion (a) $p_1 = Pr[(X_1^{m)} = 3) \cap ... \cap (X_n^{(m)} = 3)]$, and based on subqeustion (b) $p_2 = Pr[(Y_1^{(m)} = 3) \cap ... \cap (Y_n^{(m)} = 3)]$. Using the theorem 5.6 we know that:
+\begin{equation}
+p_1 = Pr[(X_1^{m)} = 3) \cap ... \cap (X_n^{(m)} = 3)] =  Pr[(Y_1^{(m)} = 3) \cap ... \cap (Y_n^{(m)} = 3) |  \sum_{i= 1}^{n} Y_i^{(m)} = 3n]
+\end{equation}
+Based on one discussion problem we solved, the sum of n Poisson distribution random variables is a Poisson distribution random variable with $\mu = \sum_{i= 1}^{n} \mu_i$. In our case $Y = \sum_{i= 1}^{n} Y_i^{(m)}$ with $\mu_Y = \sum_{i= 1}^{n} \mu_{Y_i}$ Using this result and the definition of conditional probabilities we can imply that equation (2) will be:
+\begin{align*}
+p_1 &=  Pr[(Y_1^{(m)} = 3) \cap ... \cap (Y_n^{(m)} = 3) |  \sum_{i= 1}^{n} Y_i^{(m)} = 3n] \Longrightarrow \\
+p_1 &=  Pr[(Y_1^{(m)} = 3) \cap ... \cap (Y_n^{(m)} = 3) |  Y = 3n] \Longrightarrow \\
+p_1 &=  \displaystyle{\frac{Pr[(Y_1^{(m)} = 3) \cap ... \cap (Y_n^{(m)} = 3) \cap (Y = 3n)]}{Pr[Y = 3n]}} \Longrightarrow \\
+p_1 &=  \displaystyle{\frac{Pr[(Y_1^{(m)} = 3) \cap ... \cap (Y_n^{(m)} = 3)]}{Pr[Y = 3n]}} \Longrightarrow \\
+p_1 &=  \displaystyle{\frac{p_2}{Pr[Y = 3n]}} \Longrightarrow \displaystyle{\frac{p_2}{p_1}} =  Pr[Y = 3n]
+\end{align*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Poisson diagnostics}
+We assume that A,B and C are independent Poisson random variables with means $p_1\mu,p_2\mu$ \& $p_3\mu$ respectively. Given that this is true, in order to prove that X,Y and Z are independant Poisson random variables we have to show that the joint distribution of A,B and C is the same with the joint distribution of X,Y and Z.
+Moreover, through discussions we have shown that the sum of Poisson random variables is a Poisson random variable with expected value equal to the sum of the respected random variables,so we define $ D = X+ Y+ Z$. Also, we define the joint distribution of X,Y,Z as:
+\begin{equation}
+Pr[{(X=x)} \cap {(Y=y)} \cap {(Z=z)}] = Pr[{(X=x)} \cap {(Y=y)} \cap {(D = x +y+ z)}] 
+\end{equation}
+The above expression implies that if $\{D= x+y+z\}$ event happens then $\{Z=z\}$ happens too.
+So equation (3) takes the following form based on product rule:
+\begin{equation}
+Pr(X,Y,Z) = Pr(\{X=x\} | \{Y=y\} \cap \{D = x+y+z\})\cdot Pr(\{Y=y\} | \{D = x+y+z\})\cdot Pr(\{D = x+y+z\})
+\end{equation}
+Due to definition of conditional probabilities and the idea that the Poisson approximation to Binomial distribution we have the following expressions for the equation (4):
+\begin{align*}
+Pr(X,Y,Z) &= Pr(\{X=x\} | \{Y=y\} \cap \{D = x+y+z\})\cdot Pr(\{Y=y\} | \{D = x+y+z\})\cdot Pr(\{D = x+y+z\}) \Longrightarrow \\
+&= {x+z \choose x}\cdot (\frac{p_1}{1-p_2})^x\cdot (\frac{1-p_1-p_2}{1 -p_2})^{z}\cdot {x+y+z \choose y}\cdot p_2^y\cdot(1-p_2)^{x+z}  \cdot \frac{e^{-\mu}\cdot \mu^{x+y+z}}{(x+y+z)!} \Longrightarrow \\
+&= \frac{(x+z)!}{x! \cdot z!}\cdot (\frac{p_1}{1-p_2})^x\cdot (\frac{1-p_1-p_2}{1 -p_2})^{z}\cdot \frac{(x+y+z)!}{(x+z)! \cdot y!}\cdot p_2^y\cdot(1-p_2)^{x+z}  \cdot \frac{e^{-\mu}\cdot \mu^{x+y+z}}{(x+y+z)!} \Longrightarrow \\
+&= \frac{1}{x! \cdot z!}\cdot (\frac{p_1}{1-p_2})^x\cdot (\frac{1-p_1-p_2}{1 -p_2})^{z}\cdot \frac{1}{y!}\cdot p_2^y\cdot(1-p_2)^{x+z}  \cdot e^{-\mu}\cdot \mu^{x+y+z} \xrightarrow{1 = p_3 + p_2 + p_1} \\
+&= \frac{1}{x! \cdot z!}\cdot p_1^x\cdot (1-p_1-p_2)^{z}\cdot \frac{1}{y!}\cdot p_2^y  \cdot e^{-\mu \cdot (p_1 + p_2 + p_3)}\cdot \mu^{x+y+z} \xrightarrow{p_3 = 1 - p_1 +p_2} \\
+&= \frac{1}{x! \cdot z!}\cdot p_1^x\cdot p_3^{z}\cdot \frac{1}{y!}\cdot p_2^y  \cdot e^{-\mu \cdot (p_1 + p_2 + p_3)}\cdot \mu^{x+y+z} =
+\frac{e^{-\mu \cdot p_1} \cdot (\mu p_1)^x}{x!} \cdot \frac{e^{-\mu \cdot p_2} \cdot (\mu p_2)^y}{y!} \cdot \frac{e^{-\mu \cdot p_3} \cdot (\mu p_3)^z}{z!}  \Longrightarrow \\
+&= \Pr(\{A=a\}) \cdot Pr(\{B=b\}) \cdot Pr(\{C=c\}) = Pr(A,B,C)
+\end{align*}
+\end{section}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Poisson Fish}
+\subsection{} 
+We define the Poisson random variable $N \sim Poisson(s)$, which describes the number of samples it gets as input the algorithm A. We define the event $E_{fail}^{A'}$ as the event of A' algorithm's failure. Algorithm A' uses algorithm A as a black box. As the exercise describes the algorithm A' fails when the total number of samples feed in algorithm A exceed $2s$. So this probability is bounded as follows using the Chebyshev's inequality :
+\begin{align*}
+Pr(E_{fail}^{A'}) &= Pr(N>2s) = Pr(N-s>s) \leq Pr(|N-s|>s) \leq \frac{Var(N)}{s^2} = \frac{s}{s^2} = \frac{1}{s}
+\end{align*}
+We define Y and Y' as random variables of the event of estimate number of species in the pond as a result from algorithm A and algorithm A'. If we define S to be every set of possible outputs S including "fail", then through law of total probability we can imply that:
+\begin{equation}
+Pr(Y\in S) &= Pr(Y \in S | E_{fail}^{A'}) \cdot Pr(E_{fail}^{A'}) + Pr(Y \in S | \tilde{E}_{fail}^{A'}) \cdot Pr(\tilde{E}_{fail}^{A'}) \end{equation}
+Also applying the law of total probability to $Pr(Y'\in S)$ we have:
+\begin{equation}
+Pr(Y'\in S) &= Pr(Y' \in S | E_{fail}^{A'}) \cdot Pr(E_{fail}^{A'}) + Pr(Y' \in S | \tilde{E}_{fail}^{A'}) \cdot Pr(\tilde{E}_{fail}^{A'}) \end{equation}
+At this point we have to point out that $Pr(Y' \in S | \tilde{E}_{fail}^{A'}) = Pr(Y \in S | \tilde{E}_{fail}^{A'})$ since if we draw less than $2s$ then algorithm A' does not fail and given that algorithm A' uses the algorithm A, that means that both probabilities describes the same event.Therefore, using the absolute value of the subtraction of the above equations (5) and (6), the factors including the above probabilities will be eliminated and leaving us as a result:
+\begin{align*}
+|Pr(Y\in S) - Pr(Y'\in S)| &= |Pr(Y \in S | E_{fail}^{A'}) \cdot Pr(E_{fail}^{A'}) - Pr(Y' \in S | E_{fail}^{A'}) \cdot Pr(E_{fail}^{A'})| \Longrightarrow \\
+ &= Pr(E_{fail}^{A'}) \cdot |Pr(Y \in S | E_{fail}^{A'}) - Pr(Y' \in S | E_{fail}^{A'})|
+\end{align*}
+Based on the fact that the absolute difference between any probabilities could be at most 1 and thanks to $Pr(E_{fail}^{A'}) = \frac{1}{s}$ the above equation takes its final form:
+\begin{align*}
+|Pr(Y\in S) - Pr(Y'\in S)| 
+ &= Pr(E_{fail}^{A'}) \cdot |Pr(Y \in S | E_{fail}^{A'}) - Pr(Y' \in S | E_{fail}^{A'})| \leq \frac{1}{s} < \frac{2}{s}
+\end{align*}
+\subsection{}
+In contrast to subsquestion (a), the requested algorithm A' is a Poisson algorithm that uses a standardized algorithm A to satisfy the claim. So the algorithm A' is the following. We draw N samples from Poisson distribution and if $N<s$ then we fail since algorithm A takes exactly s samples in order to work.Otherwise, if $N \geq s$ then we give s samples to algorithm A to process. Based on this algorithm A', both algorithm A' and algorithm A satisfy the claim.
+\subsection{}
+We define the Poisson random variable $N \sim Poisson(2\cdot s)$, which describes the number of samples it gets as input the algorithm A'. We define the event $E_{fail}^{A'}$ as the event of A' algorithm's failure. Algorithm A' uses algorithm A as a black box. As the subquestion (b) describes the algorithm A' fails when the total number of samples feed in algorithm A is less than $s$. So this probability is bounded as follows using the Chernoff's inequality for Poisson distributions:
+\begin{align*}
+Pr(E_{fail}^{A'}) &= Pr(N < s) \leq \frac{e^{-\mu} \cdot (e\cdot \mu)^s}{s^s} = \frac{e^{-2 \cdot s} \cdot (e\cdot 2 \cdot s)^s}{s^s} = e^{-2 \cdot s} \cdot e^s\cdot 2^s = e^{-s} \cdot 2^s = (\frac{2}{e})^s
+\end{align*}
+We define Y and Y' as random variables of the event of estimate number of species in the pond as a result from algorithm A and algorithm A'. If we define S to be every set of possible outputs S including "fail", then through law of total probability we can imply that:
+\begin{equation}
+Pr(Y\in S) &= Pr(Y \in S | E_{fail}^{A'}) \cdot Pr(E_{fail}^{A'}) + Pr(Y \in S | \tilde{E}_{fail}^{A'}) \cdot Pr(\tilde{E}_{fail}^{A'}) \end{equation}
+Also applying the law of total probability to $Pr(Y'\in S)$ we have:
+\begin{equation}
+Pr(Y'\in S) &= Pr(Y' \in S | E_{fail}^{A'}) \cdot Pr(E_{fail}^{A'}) + Pr(Y' \in S | \tilde{E}_{fail}^{A'}) \cdot Pr(\tilde{E}_{fail}^{A'}) \end{equation}
+At this point we have to point out that $Pr(Y' \in S | \tilde{E}_{fail}^{A'}) = Pr(Y \in S | \tilde{E}_{fail}^{A'})$ since if we draw more than $s$ then algorithm A' does not fail and given that algorithm A' uses the algorithm A, that means that both probabilities describes the same event.Therefore, using the absolute value of the subtraction of the above equations (7) and (8), the factors including the above probabilities will be eliminated and leaving us as a result:
+\begin{align*}
+|Pr(Y\in S) - Pr(Y'\in S)| &= |Pr(Y \in S | E_{fail}^{A'}) \cdot Pr(E_{fail}^{A'}) - Pr(Y' \in S | E_{fail}^{A'}) \cdot Pr(E_{fail}^{A'})| \Longrightarrow \\
+ &= Pr(E_{fail}^{A'}) \cdot |Pr(Y \in S | E_{fail}^{A'}) - Pr(Y' \in S | E_{fail}^{A'})|
+\end{align*}
+Based on the fact that the absolute difference between any probabilities could be at most 1 and thanks to $Pr(E_{fail}^{A'}) = (\frac{2}{e})^s$ the above equation takes its final form:
+\begin{align*}
+|Pr(Y\in S) - Pr(Y'\in S)| 
+ &= Pr(E_{fail}^{A'}) \cdot |Pr(Y \in S | E_{fail}^{A'}) - Pr(Y' \in S | E_{fail}^{A'})| \leq (\frac{2}{e})^s \leq \frac{2}{s}
+\end{align*}
+Given that $\frac{2}{e} < 1$  then or sufficient large number of s, the expression $(\frac{2}{e})^s$ is going to be less than $\frac{2}{s}$.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document} 

@@ -1,0 +1,176 @@
+\documentclass[11pt]{537homework}
+
+% For including image files
+\usepackage{graphicx}
+\usepackage[ruled,vlined,noline]{algorithm2e}
+\usepackage{blindtext}
+\usepackage{enumitem}
+\usepackage{xcolor}
+% set the vertical spacing between paragraphs
+\setlength{\parskip}{1.5mm}
+
+% For fancy math
+\RequirePackage{amsmath,amsthm,amssymb}
+\newtheorem{theorem}{Theorem}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{claim}[theorem]{Claim}
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\newcommand{\ord}[2][th]{\ensuremath{{#2}^{\mathrm{#1}}}}
+% shorthand for \mathcal{O}
+\newcommand{\Ocal}{\ensuremath{\mathcal{O}}}
+
+
+% homework number
+\hwnumber{2}
+% your name
+\author{Emmanouil Kritharakis}
+% Collaborators. If you didn't collaborate, write "\collaborators{none}".
+% If you did, for each collaborator, write "worked together", "I helped him/her" or "He/ she helped me".
+\collaborators{Eric Munson, Aneesh Raman, Piotr Teterwak (Work together)}  
+
+\begin{document}
+\section{Improving guarantees of randomized algorithms}
+
+
+% If the problem has multiple parts, use \subsection command.
+\subsection{}
+The modification of the randomized algorithm A would be running it iteratively until it outputs the correct answer. Based on the fact that the initial algorithm fails with probability $99\%$, the idea of iterative runs could be modeled as a geometrical distribution with probability of success $p = 0.01$. As we know, the expected value of a geometric distribution is calculated as $\frac{1}{p} = \frac{1}{0.01} = 100$. Therefore, running 100 times the initial algorithm A gives a new expected running time of $100 \cdot O(n^2) \approx O(n^2) $ for our approach.
+\subsection{}
+We define X the actual running time of randomized algorithm B. Initially, the algorithm B runs in expected time $T(n)$. We stop the algorithm at $a \cdot T(n)$ running time with $a>0$.Guaranteeing that this algorithm is finished within $a \cdot T(n)$ with probability larger than or equal to 0.95, it implies that: $Pr(X \geq a \cdot T(n)) \leq 0.05$. Based on the Markov inequality and the fact that $E[X] = T(n)$
+we get:
+\allowdisplaybreaks
+\begin{align*}
+Pr(X \geq a \cdot T(n)) &\leq \frac{E[X]}{a \cdot T(n)} \Longrightarrow \\
+Pr(X \geq a \cdot T(n)) &\leq \frac{T(n)}{a \cdot T(n)} \Longrightarrow \\
+Pr(X \geq a \cdot T(n)) &\leq \frac{1}{a}
+\end{align*}
+If we assign a = 20 then the inequality will be  $Pr(X \geq a \cdot T(n)) &\leq 0.05$, so that implies if we run our initial algorithm B and stopped it after $20 \cdot T(n)$ we can guarantee the success of it with bounded probability of 0.95.
+Given the variance of algorithm B equals $\sqrt{n}$ then through Chebyshev inequality we get:
+\allowdisplaybreaks
+\begin{align*}
+Pr(X \geq a \cdot T(n)) = Pr(X - T(n) \geq (a-1) \cdot T(n)) = Pr(X - E[X] \geq (a-1) \cdot T(n)) &\geq \frac{Var(X)}{(a-1)^2 \cdot T(n)^2} \Longrightarrow \\
+ &\geq \frac{\sqrt{n}}{(a-1)^2 \cdot T(n)^2} 
+\end{align*}
+Again, we need:
+\begin{align*}
+Pr(X \geq a \cdot T(n)) &\geq 0.05 \Longrightarrow \\ 
+\frac{\sqrt{n}}{(a-1)^2 \cdot T(n)^2} &\geq 0.05 \Longrightarrow \\
+\frac{n^{\frac{1}{4}}}{(a-1) \cdot T(n)} &\geq \frac{\sqrt{5}}{10} \Longrightarrow \\
+a &\geq \frac{2\cdot \sqrt{5} n^{\frac{1}{4}}}{T(n)} + 1 
+\end{align*}
+\subsection{}
+We define X the random variable that describes the number of wrong answers in k tries. If function f returns correct answer with probability 0.7 then it is easy to assume that X random variable is a Binomial distribution over k tries $X \sim Binomial(k,0.3)$.Since we care about the event of algorithm making a mistake, which happens only if the most frequent answer is a wrong one and by frequent we mean equal or more than the half of k tries. So the event we need to investigate is $X \geq \frac{k}{2}$. Using Chernoff-Hoeffding bound and the expected value of X, $E[X] = 0.3 \cdot k$, we have:
+\begin{align*}
+Pr(X \geq \frac{k}{2}) = Pr(X \geq (1+\frac{2}{3}) \cdot 0.3\cdot k) \leq (\frac{e^{\frac{2}{3}}}{(1+\frac{2}{3})^{1+\frac{2}{3}}})^{0.3 \cdot k} \approx 0.9461^k  
+\end{align*}
+Given the fact that we need the above inequality to be upper bounded with $2^{-t}$, we compute k as:
+\begin{align*}
+ 0.9461^k &\leq 2^{-t} \Longrightarrow \\
+ k &\geq log_{(0.9461)}(\frac{1}{2}) \cdot t \Longrightarrow \\
+ k &\geq 12.51 \cdot t
+\end{align*}
+Since k represent the number of trials it has to be integer, so we compute the upper floor and the final answer is: $ k \geq \ceil{12.51} \cdot t$
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Exercise 4.10 from MU}
+
+
+% If the problem has multiple parts, use \subsection command.
+\subsection{}
+We define $Y_i$ as the expected winning money a player receives in i-th game. Based on exercise's description the expected value of $Y_i, E[Y_i] $ is the following:
+\begin{align*}
+ E[Y_i] = 2 \cdot \frac{4}{25} + 99 \cdot \frac{1}{200} -1 \cdot \frac{167}{200}= -0.02
+\end{align*}
+Also, we define as $Y$ the total turns in one million games and its expected value $E(Y)$ is, based on that each winning money of each player $Y_i$ is independent, the following: 
+\begin{align*}
+Y = \sum_{i=1}^{10^6} Y_i \Longrightarrow \\
+ E[Y] =\sum_{i=1}^{10^6} E[Y_i] = -0.02 \cdot 10^6
+\end{align*}
+We know that each play winning money can receive values from -1 (no win at all) to 99 (win 100 with 1 dollar input), so $Pr(-1 \leq Y_i\leq 99) = 1$. Based on that, we can apply the Hoeffding Bound as follows to answer the question about the probability of giving 10000 dollars over the first one million games: 
+\begin{align*}
+Pr(Y \geq 10^4) = Pr(Y \geq 10^6 \cdot 0.01) = Pr(Y \geq 10^6 \cdot(-0.02 + 0.03)) \leq e^{\frac{-2\cdot 10^6 \cdot (0.03)^2}{(99 - (-1))^2}} = e^{-0.18} \approx 0.8353 
+\end{align*}
+\subsection{}
+Using the random variable of sub question (a) we define X the same random variable as Y $(X = Y)$ since Y expresses the total returns throughout a million games, which is equal to the total net loss of the casino. Hence:
+\begin{align*}
+E[e^{t\cdot X}] &= E[e^{t\cdot \sum_{i=1}^{10^6} X_i}]  \Longrightarrow \\
+                &= E[\prod_{i=1}^{10^6} e^{t\cdot X_i}] \Longrightarrow \\
+                &= \prod_{i=1}^{10^6} E[e^{t\cdot X_i}] 
+\end{align*}
+Also based on subquestion (a) we know that:\\
+\begin{align*}
+E[e^{t\cdot X_i}] &= e^{2\cdot t} \cdot \frac{4}{25} + e^{99 \cdot t} \cdot \frac{1}{200} + e^{-1 \cdot t} \cdot \frac{167}{200}
+\end{align*}
+Therefore, previous equation takes its final form as:
+\begin{align*}
+E[e^{t\cdot X}] &= \prod_{i=1}^{10^6} E[e^{t\cdot X_i}] \Longrightarrow \\
+                &= \prod_{i=1}^{10^6} (e^{2\cdot t} \cdot \frac{4}{25} + e^{99 \cdot t} \cdot \frac{1}{200} + e^{-1 \cdot t} \cdot \frac{167}{200})
+\end{align*}
+\subsection{}
+For $Pr(X \geq 100)$, we apply the Markov's inequality:
+\begin{align*}
+Pr(X \geq 100) = Pr(e^X \geq e^{100}) = Pr(e^{t\cdot X} \geq e^{100\cdot t} ) &\leq \frac{E[e^{t\cdot X}]}{e^{100\cdot t}} \Longrightarrow \\
+&\leq \frac{\prod_{i=1}^{10^6} (e^{2\cdot t} \cdot \frac{4}{25} + e^{99 \cdot t} \cdot \frac{1}{200} + e^{-1 \cdot t} \cdot \frac{167}{200})}{e^{100\cdot t}} \Longrightarrow \\ &\leq \prod_{i=1}^{10^6} (e^{-98 \cdot t} \cdot \frac{4}{25} + e^{-t} \cdot \frac{1}{200} + e^{-101 \cdot t} \cdot \frac{167}{200})
+\end{align*}
+Asigning the value $t = 0.0006$ to the above inequality gives us:
+\begin{align*}
+Pr(X \geq 100) &\leq \prod_{i=1}^{10^6} (e^{-98 \cdot t} \cdot \frac{4}{25} + e^{-t} \cdot \frac{1}{200} + e^{-101 \cdot t} \cdot \frac{167}{200}) \xrightarrow{t = 6 \cdot 10^{-4}} \\
+&\leq \prod_{i=1}^{10^6} (e^{-98 \cdot 6 \cdot 10^{-4}} \cdot \frac{4}{25} + e^{-6 \cdot 10^{-4}} \cdot \frac{1}{200} + e^{-101 \cdot 6 \cdot 10^{-4}} \cdot \frac{167}{200}) \approx 16 \cdot 10^{-4} 
+\end{align*}
+\end{section}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Permutation Routing on the Hypercube}
+
+\subsection{}
+The address of a node of the Hypercube is $(x_1,...,x_{\frac{n}{2}},x_{\frac{n}{2} +1},...,x_n)$. Based on the hint we consider the packets with source in the form $(x_1,...,x_{\frac{n}{2}},0,0,...,0)$. The total number of packets are $2^n$, where n is the size of our cube. Fixing latter half of address's bits being zero, then the number of nodes having the form $(x_1,...,x_{\frac{n}{2}},0,0,...,0)$ are $2^{\frac{n}{2}}$. So there are $2^{\frac{n}{2}}$ packets in a transpose permutation with a source address in form $(x_1,...,x_{\frac{n}{2}},0,...,0)$ and a destination in form $(0,...,0,x_1,...,x_{\frac{n}{2}})$. 
+\par Running the bit-fixing routing algorithm, after $\frac{n}{2}$ first bits each of those $2^\frac{n}{2}$ packets will have as a source address $(0,...,0,0,...,0)$. From those $2^\frac{n}{2}$ packets,exactly half of them, in particular those who have $x_1 = 1$ in their destination, moving to address $(0,...,0,1,...,0)$ will fix their next bit, since the destinatition is in form $(0,...,0,x_1,...,x_{\frac{n}{2}})$ = $(0,...,0,1,...,x_{\frac{n}{2}})$. The number of those buckets is $\displaystyle{\frac{2^\frac{n}{2}}{2}} = 2^{\frac{n}{2} - 1}$. Hence, if we suppose the best case in which bits in destination $(0,...,0,1,x_2,...,x_{\frac{n}{2}})$ starting from $x_2$ to $x_n$ are zero as our source then at least $2^{\frac{n}{2} - 1} =\frac{2^\frac{n}{2}}{2} = \frac{\sqrt{2^n}}{2} = \frac{\sqrt{N}}{2}$ packets traverse the edge between nodes $(0,...,0,0,...,0)$ and $(0,...,0,1,...,0)$, which takes $\Omega(\sqrt{N})$.
+\subsection{}
+
+\subsubsection{}
+Based on exercise, the packets we do care, have source's address in form $(x_1,...x_{\frac{n}{2}},x_{\frac{n}{2}+1},...,x_n)$ =$(1,...,1,0...,0)$ with the number of "ones" is equal to k and the number of "zeros" is equal to k, and have destination's address in form   $(x_{\frac{n}{2}+1},...,x_n,x_1,...x_{\frac{n}{2}})$ =$(0,...,0,1...,1)$ with the number of "ones" is equal to k and the number of "zeros" is equal to k. The question to be answered is what is the expected number of packets that going through the node $0^{n}$, or in other words what is the expected probability $\mu$ to randomly pick the "ones" from the source address and turn them into "zeros" to turn the source's address to $(0,...,0,0...,0)$. Note that we pass through the node $0^{n}$, if we have corrected all the "ones" to "zeros" before correcting the "zeros" to "ones".
+\par The total number of "ones" in the source address is the permutation of choosing those k "ones" out of the first $\frac{n}{2}$ bits, where k will be chosen later. So, the total number of "ones" is $\displaystyle{{\frac{n}{2} \choose k}}$.Moreover, we know that the sum of "ones" and "zeros" are $2\cdot k$. The probability of choosing randomly a "one" with each draw being independent from the others is $\displaystyle{\frac{1}{{2\cdot k \choose k}}}$. So, the expected probability to randomly pick the "ones" from the source address and turn them into "zeros" to pass from the node $0^n$ is  $\mu = \displaystyle{\frac{{\frac{n}{2} \choose k}}{\frac{1}{{2\cdot k \choose k}}}}$.
+\subsubsection{}
+Let $k = \frac{n}{2}$, then the initial inequality takes the following form:
+\begin{align*}
+(\frac{2\cdot k}{k})^k \leq {2\cdot k \choose k} \leq (\frac{2\cdot e \cdot k}{k})^k \Longrightarrow \\
+\frac{1}{(\frac{2\cdot e \cdot k}{k})^k} \geq \frac{1}{{2\cdot k \choose k}} \geq  \frac{1}{(\frac{2\cdot e \cdot k}{k})^k} \Longrightarrow \\
+\frac{{\frac{n}{2} \choose k}}{{2\cdot k \choose k}} \geq  \frac{{\frac{n}{2} \choose k}}{(\frac{2\cdot e \cdot k}{k})^k} \Longrightarrow \\
+\frac{{\frac{n}{2} \choose k}}{{2\cdot k \choose k}} \geq \frac{{\frac{n}{2} \choose k}}{(\frac{2\cdot e \cdot k}{k})^k} \geq  \frac{(\frac{n}{2 \cdot k})^k}{(\frac{2\cdot e \cdot k}{k})^k} \Longrightarrow \\
+\mu \geq \frac{(\frac{n}{2 \cdot k})^k}{(\frac{2\cdot e \cdot k}{k})^k} \Longrightarrow \\ 
+\mu \geq (\frac{n}{4 \cdot e \cdot k})^k \xrightarrow{k = \frac{n}{8\cdot e}} \\ 
+\mu \geq 2^{\frac{n}{8 \cdot e}} = 2^{\Omega(n)}
+\end{align*}
+\subsubsection{}
+We define as $X_i$ as the indicator random variable of i-th packet that goes through node $0^n$. So:
+\[ 
+X_i= \left\{
+\begin{array}{ll}
+       1  & \text{if packet i goes through node } 0^n \\
+       0  & \text{if packet i does not go through node } 0^n \\
+\end{array} 
+\right. 
+\]
+Hence,the sum of all possible $X_i$ packets is defined as a random variable X, as follows $X = \sum_{i=1}^{2^n} X_i$. We want to calculate the probability that at least $\frac{B}{2}$ packets go through node $0^n$, where $B = \mu$ based on the subquestion b(ii). Having known the lower bound of $\mu$ from previous subquestion, we will use the lower tail of Chernoff bounds in order to calculate the probability of the sum of $X_i$ packets that go through $0^n$ is at most $\frac{B}{2}$ and then calculate the complimentary probability, which is the one asked. So:  
+\begin{align*}
+Pr(X \leq (1-\delta) \cdot \mu) &\leq e^{-\frac{\mu \cdot \delta^2}{2}} \xrightarrow{\delta = \frac{1}{2}} \\
+Pr(X \leq \frac{\mu}{2}) &\leq e^{-\frac{\mu}{8}}  \Longrightarrow \\
+Pr(X \leq \frac{\mu}{2}) &\leq e^{-\frac{2^{\frac{n}{8\cdot e}}}{8}}  \Longrightarrow \\
+Pr(X \leq \frac{\mu}{2}) &\leq e^{-2^{\frac{n}{8\cdot e} - 3}}  \Longrightarrow \\
+Pr(X \leq \frac{B}{2}) &\leq e^{-2^{\frac{n}{8\cdot e} - 3}}  
+\end{align*}
+So the asked probability of the sum of $X_i$ packets that go through $0^n$ is at least $\frac{B}{2}$, is calculated as \\ $Pr(X \geq \frac{B}{2}) = 1 - Pr(X \leq \frac{B}{2}) = 1 - e^{-2^{\frac{n}{8\cdot e} - 3}}$, which is as expected a high probability.
+\subsubsection{}
+Based on subquestion b(ii), we have calculated the lower bound of expected number of packets that go through $0^n$ node as $2^{\frac{n}{8 \cdot e}$. Passing through a particular node, a packet has n possible edges to traverse. Hence, lowering the bound of required number of steps, $2^{\frac{n}{8 \cdot e}$ packets have to pass from the intermediate node $0^n$ by using at least $\displaystyle{\frac{2^{\frac{n}{8 \cdot e}}}{n}}$ steps.  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document} 

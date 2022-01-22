@@ -1,0 +1,324 @@
+\documentclass[11pt]{537homework}
+
+% For including image files
+\usepackage{graphicx}
+\usepackage[ruled,vlined,noline]{algorithm2e}
+% set the vertical spacing between paragraphs
+\setlength{\parskip}{1.5mm}
+
+% For fancy math
+\RequirePackage{amsmath,amsthm,amssymb}
+\newtheorem{theorem}{Theorem}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{claim}[theorem]{Claim}
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\newcommand{\ord}[2][th]{\ensuremath{{#2}^{\mathrm{#1}}}}
+% shorthand for \mathcal{O}
+\newcommand{\Ocal}{\ensuremath{\mathcal{O}}}
+
+
+% homework number
+\hwnumber{2}
+% problem number
+\problemnumber{1}
+% your name
+\author{Emmanouil Kritharakis}
+% Collaborators. If you didn't collaborate, write "\collaborators{none}".
+% If you did, for each collaborator, write "worked together", "I helped him/her" or "He/ she helped me".
+\collaborators{Eric Munson, Hsin-Hung Wu, Vivian Gunawan (Work together)}  
+
+\begin{document}
+\section{Detecting defects}
+
+
+% If the problem has multiple parts, use \subsection command.
+\subsection{}
+We define E the event of find at least one defective cookie. The complimentary probability of event E, $Pr(\overline{E})$ is not to find defective cookies.Since we pick each cookie independently and uniformly at random, not finding defective cookies after k tries is equal to:
+\begin{equation}
+    Pr(\overline{E}) = (1-p)^k \Longrightarrow 
+    Pr(E) = 1 - (1-p)^k
+\end{equation}
+Given $p \geq a$ and $ k \geq \frac{ln(100)}{a}$ it is true that:
+\allowdisplaybreaks
+\begin{align*}
+  k & \geq \frac{ln(100)}{p} \Longrightarrow \\
+  k \cdot p  & \geq ln(100) \Longrightarrow \\
+  -k \cdot p &\leq ln(0.01) \Longrightarrow \\
+  e^{-k\cdotp} & \leq 0.01 \xrightarrow{(1-x)^k \leq e^{-k}}\\
+  (1-p)^k & \leq 0.01 \Longrightarrow \\
+  1 - (1-p)^k & \geq 0.99 \xrightarrow{(1)} \\
+  Pr(E) &= 0.99
+\end{align*}
+\endgroup
+
+
+
+\subsection{}
+We define W the event all the unreliable workers have been detected and fired and $W_i$ the event that the worker i has been detected as reliable. Therefore :  
+\allowdisplaybreaks
+\begin{align*}
+  Pr(W) &= 1 - Pr[\bigcup_{i \in n}^{}  W_i]
+\end{align*}
+\endgroup
+Assuming that the $Pr(W) \geq 0.99$ it implies that:
+\allowdisplaybreaks
+\begin{align*}
+  Pr[\bigcup_{i \in n}^{}  W_i] \leq 0.01
+\end{align*}
+\endgroup
+Based on union bound inequality, we know that:
+\allowdisplaybreaks
+\begin{align*}
+  Pr[\bigcup_{i \in n}^{}  W_i] \leq n \cdot Pr(W_i)
+\end{align*}
+\endgroup
+With regards to subquestion (a) for a reliable worker $W_i$ it is true that $Pr(W_i) \leq (1-a)^k$. So:
+\begin{align*}
+  n \cdot (1-a)^k & \leq 0.01 \xrightarrow{(1-x) \leq e^{-x}}\\
+  n \cdot e^{-a\cdot k} & \leq 0.01 \Longrightarrow\\
+  e^{-a\cdot k} & \leq \frac{0.01}{n} \Longrightarrow\\
+  -a\cdot k & \leq ln(\frac{0.01}{n}) \Longrightarrow\\
+  -a\cdot k & \leq ln(\frac{1}{100 \cdot n}) \Longrightarrow\\
+  k & \geq \frac{ln(100 \cdot n)}{a} \Longrightarrow\\
+  k_{min} &= \frac{ln(100 \cdot n)}{a}
+\end{align*}
+\endgroup
+\end{section}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Jensen’s Inequality}
+
+
+% If the problem has multiple parts, use \subsection command.
+\subsection{}
+Given that f is concave function we can assume that f is a twice differentiable function and $f''(x) \leq 0$. We define $\mu = E[X]$ where X is a random value. In order to proof the Jensen's inequality change for concave functions we will use the Taylor expansion of f function based on the fact that f is twice differentiable. So:
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+  f(x) &= f(\mu) + f'(\mu)\cdot(x-\mu) + \frac{f''(c)\cdot (x-\mu)^2}{2} \xrightarrow{f''(x) \leq 0} \\
+       & \leq f(\mu) + f'(\mu)\cdot(x-\mu) 
+\end{align*}
+\endgroup
+Using linearity of expectations to the previous equation and based on the identity of $E[cX]=c\dotE[X]$ where c is a constant the previous inequatily turn into:
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+  E[f(x)] & \leq E[f(\mu) + f'(\mu)\cdot(x-\mu)] \Longrightarrow\\
+          & \leq E[f(\mu)] + f'(\mu)\cdot E[(x-\mu)] \Longrightarrow\\    
+          & \leq f(\mu) + f'(\mu)(\cdot E[x]-E[\mu)] \Longrightarrow\\
+          & \leq f(E[X])
+\end{align*}
+\endgroup
+So Jensen’s Inequality for a concave f function turns into $E[f(x)] \leq f(E[X])$
+
+\subsection{}
+We define arithmetic mean of n numbers as $A(x_1,...,x_n)= \frac{x_1+...+x_n}{n} = \displaystyle{\frac{1}{n} \cdot \sum_{i=1}^{n} x_i } $\\
+Also, we define geometric mean of n numbers as $G(x_1,...,x_n)= {(x_1\cdot...\cdot x_n)}^{\frac{1}{n}} = \displaystyle{\prod_{i=1}^{n} (x_i)^{\frac{1}{n}}} $\\
+We want to prove that $\displaystyle{\frac{1}{n} \cdot \sum_{i=1}^{n} x_i} \geq \displaystyle{\prod_{i=1}^{n} (x_i)^{\frac{1}{n}}}$.\\
+Based on subquestion (a) we define f(x) as a concave function, so it is true that:
+\begin{equation}
+     \displaystyle{\sum_{i=1}^{n} p_i \cdot f(x_i)} \leq \displaystyle{f(\sum_{i=1}^{n} p_i \cdot x_i)}
+\end{equation} 
+where  $\displaystyle{\sum_{i=1}^{n} p_i =1}$.We choose $f(x)=ln(x)$ since $ln(x)$ is a concave function since it is a twice differentiable function with $f''(x) = -  \frac{1}{x^2} \leq 0$. So equation (1) will turn into:\\
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+     \displaystyle{\sum_{i=1}^{n} p_i \cdot ln(x_i)} &\leq \displaystyle{ln(\sum_{i=1}^{n} p_i \cdot x_i)} \Longrightarrow\\
+     \displaystyle{\sum_{i=1}^{n} ln(x_i^{p_i})} &\leq \displaystyle{ln(\sum_{i=1}^{n} p_i \cdot x_i)} \Longrightarrow\\
+     \displaystyle{ln(\prod_{i=1}^{n} x_i^{p_i}}) &\leq \displaystyle{ln(\sum_{i=1}^{n} p_i \cdot x_i)} \xrightarrow{ln(x) \nearrow }\\
+     \displaystyle{\prod_{i=1}^{n} (x_i)^{p_i}} &\leq \displaystyle{\sum_{i=1}^{n} p_i \cdot x_i} \xrightarrow{p_i = \frac{1}{n},\forall i \in [1,..,n] }\\
+     \displaystyle{\prod_{i=1}^{n} (x_i)^{\frac{1}{n}}} &\leq \displaystyle{\sum_{i=1}^{n} \frac{1}{n} \cdot x_i} \Longrightarrow \\
+     \displaystyle{\prod_{i=1}^{n} (x_i)^{\frac{1}{n}}} &\leq \displaystyle{\frac{1}{n} \cdot \sum_{i=1}^{n} x_i} 
+\end{align*}
+\endgroup
+ 
+\subsection{}
+We choose $f(x) = sin(x)$ which is a twice differentiable function and $f''(x) = -sin(x) \leq 0$, so f is a concave function.It is true that: $sin(60) = sin(\frac{A+B+C}{3}) = \frac{\sqrt{3}}{2}$. So based on the fact that f is concave we know that:
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+     E[f(x)] & \leq f(E[X]) \Longrightarrow\\
+     E[sin(x)] & \leq sin(E[X]) \xrightarrow{x = \frac{A+B+C}{3}}\\
+     E[sin(\frac{A+B+C}{3})]  & \leq \frac{\sqrt{3}}{2} \Longrightarrow \\
+     \frac{sin(A)+sin(B)+sin(C)}{3}  & \leq \frac{\sqrt{3}}{2} \Longrightarrow \\
+     sin(A)+sin(B)+sin(C)  & \leq 3 \cdot \frac{\sqrt{3}}{2} 
+\end{align*}
+\endgroup
+
+\end{section}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Random children}
+
+\subsection{}
+We define X the random variable of the event that a girl was born after a number of succeeding boy's births. Assuming that (1-p) is the probability that a boy was born and p the probability that a girl was born then  the probability of the birth of a girl after k boy's birth is the following:
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+     Pr(X=k) = (1-p)^{k-1} \cdot p 
+\end{align*}
+\endgroup
+The excepted value E[X] is given as:
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+     E[X] &= \sum_{k=1}^{\infty} k \cdot Pr(X=k) \Longrightarrow\\
+          &= \sum_{k=1}^{\infty} k \cdot (1-p)^{k-1} \cdot p \Longrightarrow\\
+          &= \frac{p}{1-p} \cdot \sum_{k=1}^{\infty} k \cdot (1-p)^{k} \xrightarrow{c = 1-p}\\
+          &= \frac{p}{1-p} \cdot \sum_{k=1}^{\infty} k \cdot c^{k} \Longrightarrow\\
+          &= \frac{p}{1-p} \cdot c \cdot \sum_{k=1}^{\infty} k \cdot c^{k-1} \Longrightarrow\\
+          &= \frac{p}{1-p} \cdot c \cdot \sum_{k=1}^{\infty} \frac{d}{dc} (c^{k}) \Longrightarrow\\
+          &= \frac{p}{1-p} \cdot c \cdot \frac{d}{dc} \sum_{k=1}^{\infty} c^{k} \Longrightarrow\\
+          &= \frac{p}{1-p} \cdot c \cdot \frac{d}{dc} (\frac{c}{1-c}) \Longrightarrow\\
+          &= \frac{p}{1-p} \cdot c \cdot \frac{1}{(1-c)^{2}} \Longrightarrow\\
+          &= \frac{1}{p}
+\end{align*}
+\endgroup
+
+So the total number of births since the first arrival of a daughter if $p=\frac{1}{2}$ are equal to $E[X] = \frac{1}{p} =  2$. So the expected value of a girl is 1 and the expected value of a boy is also 1.
+\subsection{}
+Following the same formula as in subquestion (a), the total number of births since the first arrival of a daughter is equal to: $E[X] = \frac{1}{p} = \frac{10}{4} = 2.5$ So the expected value of a girl is 1 and the expected value of a boy is 1.5.
+\subsection{}
+Assuming that after k births the number of girls are going to be born are either 1 or 0, since either a girl will be born and stop the process or k boys will be born and stop the process, the distribution of having a girl is a Bernoulli.So if we define X the number of girls who are probable to be born then:\\
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+     E[X] &= 1\cdot Pr(X=1) + 0 \cdot Pr(X=0) \Longrightarrow \\ 
+     E[X] &= Pr(X=1) =  \sum_{i=1}^{k} (1-p)^{i-1} \cdot p = 1 - (1-p)^k = 1 - (\frac{1}{2})^k
+\end{align*}
+\endgroup
+Based on the assumption that we define Y the number of boys who are probable to be born then the expected value is: 
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+     E[Y] &= \sum_{i=1}^{k} i\cdot Pr(Y=i) \Longrightarrow \\ 
+     E[Y] &= \sum_{i=1}^{k-1} [i\cdot (1-p)^i\cdot p] + k \cdot (1-p)^k \Longrightarrow \\ 
+     E[Y] &= p \cdot (1-p) \cdot \sum_{i=1}^{k-1} [i\cdot (1-p)^{i-1}] +k \cdot (1-p)^k \Longrightarrow \\ 
+     E[Y] &= p \cdot (1-p) \cdot \sum_{i=1}^{k-1} \frac{d}{di} \cdot (1-p)^i +k \cdot(1-p)^k \Longrightarrow \\ 
+     E[Y] &= p \cdot (1-p) \cdot \frac{d}{di} \cdot \sum_{i=1}^{k-1} (1-p)^i +k \cdot(1-p)^k \Longrightarrow \\ 
+     E[Y] &= 1 - (\frac{1}{2})^k 
+\end{align*}
+\endgroup
+
+\subsection{}
+Using the same formulas of subquestion (c) the expected value of girls $E[X]$ is:
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+     E[X] &= Pr(X=1) =  \sum_{i=1}^{k} (1-p)^{i-1} \cdot p = 1 - (1-p)^k = 1 - (0.6)^k
+\end{align*}
+\endgroup
+While the expected value of boys $E[Y]$ is:
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+     E[Y] &= \sum_{i=1}^{k-1} [i\cdot (1-p)^i\cdot p] + k \cdot (1-p)^k \Longrightarrow \\ 
+     E[Y] &= \sum_{i=1}^{k-1} [i\cdot (0.6)^i\cdot 0.4] + k \cdot 0.6^k \Longrightarrow \\ 
+     E[Y] &= \frac{3}{2} \cdot 5^{-k}\cdot (5^k - 3^k)  
+\end{align*}
+\endgroup
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{Random counter}
+
+
+\subsection{}
+We define n the number of the counter and k the number of bits we need to represent them. Assuming that the counter works deterministically then:
+  \begin{equation*}
+    k = \floor*{log_{2}(n)} +1 
+  \end{equation*}
+For example if the number of counter is n = 5 then $k = \floor*{log_{2}(5)} = k = \floor*{2.32} + 1=3$. We will need 3 bits.
+\subsection{}
+With regards to total expectation we need to compute $E[2^{X_i}]$. We are going to condition the expected value based on the previous value of X, $X_{i-1}$.So:
+\begingroup
+\allowdisplaybreaks
+\begin{equation}
+     E[2^{X_i}] &= E[E[2^{X_i}| X_{i-1}=x_{i-1}]] 
+\end{equation}
+For the inner expected value of the previous equation $E[2^{X_i}| X_{i-1}=x_{i-1}]$, we are going to compute it thinking intuitively. In the previous step the counter had a value $X_{i-1}=x_{i-1}$. The counter either changed to the next number of the counter $x_{i-1} + 1$ with a probability of $p = 2^{-x_{i-1}}$ or stayed in the same value $x_{i-1}$ with a probability of $1-p = 1 - 2^{-x_{i-1}}$. So, the inner expected value of $E[2^{X_i}| X_{i-1}=x_{i-1}]$ will be:
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+     E[2^{X_i}| X_{i-1}=x_{i-1}] &= 2^{x_{i-1} + 1} \cdot 2^{-(x_{i-1})} + 2^{x_{i-1}} \cdot (1 - 2^{-x_{i-1}}) \Longrightarrow \\
+     E[2^{X_i}| X_{i-1}=x_{i-1}] &= 1 + 2^{x_{i-1}} 
+\end{align*}
+\endgroup
+Using equation (3):
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+E[2^{X_i}] &= E[E[2^{X_i}| X_{i-1}=x_{i-1}]] \Longrightarrow \\
+E[2^{X_i}] &= E[1 + 2^{x_{i-1}}] = 1 + E[2^{x_{i-1}}]  
+\end{align*}
+\endgroup
+Working iteratively in the previous equation over the $E[2^{x_{i-1}}]$ terms, it is true that:\\
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+E[2^{X_i}] &= E[1 + 2^{x_{i-1}}] = 1 + E[2^{x_{i-1}}] = 1 + 1 + E[2^{x_{i-2}}] = ... = i + 1
+\end{align*}
+\subsection{}
+Assuming that:
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+ 2^X_i & \leq 10 \cdot E[2^X_i] \xrightarrow{E[2^X_i] = m+1, i=m} \\
+ 2^{X_i} & \leq 10 \cdot (m+1) \Longrightarrow \\
+ X_i & \leq log_{2}(10 \cdot (m+1)) \Longrightarrow \\
+ log_{2}(X_i) & \leq log_{2}(log_{2}(10 \cdot (m+1))) 
+\end{align*}
+So, with asymptotic notation the number of bits we will need is $O(log_{2}(log_{2}(10 \cdot (m+1))) )$
+\subsection{}
+Following the same idea as in subquestion (b), with regards to total expectation we need to compute E[$2^{2\cdot X_{i} $]. We are going to condition the expected value based on the previous value of X, $X_{i-1}$.So:
+\begin{equation}
+     E[2^{2 \cdot X_i}] = E[E[2^{2 \cdot X_i}| X_{i-1}=x_{i-1}]] 
+\end{equation}
+The inner expected value of $E[2^{2 \cdot X_i}| X_{i-1}=x_{i-1}]$ will be:
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+     E[2^{2 \cdot X_i}| X_{i-1}=x_{i-1}] &= 2^{2 \cdot x_{i-1} + 1} \cdot 2^{-(x_{i-1})} + 2^{2 \cdot x_{i-1}} \cdot (1 - 2^{-x_{i-1}}) \Longrightarrow \\
+     E[2^{X_i}| X_{i-1}=x_{i-1}] &= 3 \cdot 2^{x_{i-1}} + 2^{2\cdot (x_i -1)} 
+\end{align*}
+\endgroup
+Using equation (4):
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+E[2^{2 \cdot X_i}] &= E[E[2^{2 \cdot X_i}| X_{i-1}=x_{i-1}]] \Longrightarrow \\
+E[2^{2 \cdot X_i}] &= E[3 \cdot 2^{x_{i-1}} + 2^{2\cdot (x_i -1)} ] = 3 \cdot E[2^{x_{i-1}}]+ E[2^{2 \cdot x_{i-1}}] = 3i + E[2^{2 \cdot x_{i-1}}]
+\end{align*}
+\endgroup
+Working iteratively in the previous equation over the $E[2^{2 \cdot x_{i-1}}]$ terms, it is true that:\\
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+E[2^{2 \cdot X_i}] &= E[3 \cdot 2^{x_{i-1}} + 2^{2\cdot (x_i -1)} ] = 3i + E[2^{2 \cdot x_{i-1}}] = 3i + 3(i-1) + E[2^{2 \cdot x_{i-2}}] \Longrightarrow \\
+E[2^{2 \cdot X_i}] &= 3i + 3(i-1) + 3(i-2) + ... + 3(i-i) \Longrightarrow \\
+E[2^{2 \cdot X_i}] &= 3 \cdot (i(i+1) - \frac{(i+1)i}{2}) = 3 \cdot \frac{i(i+1)}{2}
+\end{align*}
+As long as the variance we know that $Var(2^X) = E[2^{2 \cdot X}] - (E[2^{X}])^2= 3 \cdot \frac{i(i+1)}{2} - (i+1)^2$
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document} 

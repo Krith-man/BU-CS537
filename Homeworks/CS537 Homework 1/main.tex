@@ -1,0 +1,254 @@
+\documentclass[11pt]{537homework}
+
+% For including image files
+\usepackage{graphicx}
+\usepackage[ruled,vlined,noline]{algorithm2e}
+% set the vertical spacing between paragraphs
+\setlength{\parskip}{1.5mm}
+
+% For fancy math
+\RequirePackage{amsmath,amsthm,amssymb}
+\newtheorem{theorem}{Theorem}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{claim}[theorem]{Claim}
+
+
+\newcommand{\ord}[2][th]{\ensuremath{{#2}^{\mathrm{#1}}}}
+% shorthand for \mathcal{O}
+\newcommand{\Ocal}{\ensuremath{\mathcal{O}}}
+
+
+% homework number
+\hwnumber{1}
+% problem number
+\problemnumber{1}
+% your name
+\author{Emmanouil Kritharakis}
+% Collaborators. If you didn't collaborate, write "\collaborators{none}".
+% If you did, for each collaborator, write "worked together", "I helped him/her" or "He/ she helped me".
+\collaborators{Eric Munson, Yuanli Wang}  
+
+\begin{document}
+\section{Probability review}
+
+
+% If the problem has multiple parts, use \subsection command.
+\subsection{}
+We define $A$ the event of the 2 students pick numbers from 1-10 uniformly at random.
+The sample space is $\Omega_A = {(s_1,s_2) $ with $ s_1=s_2={1,2,...,10} $.Therefore, the total combinations are 100.The combinations, in which the two students pick the same number, are those where $s_1=s_2$. So the final probability is: 
+\begin{equation}
+  Pr(A) = \frac{10}{100} = \frac{1}{10}
+\end{equation}   
+
+\subsection{}
+We define $B$ the event of the 5 students pick numbers from 1-10 uniformly at random and all of the numbers being different.The sample space is $\Omega_B = {(s_1,s_2,s_3,s_4,s_5) $ with $ s_1=s_2=s_3=s_4=s_5={1,2,...,10} $. Therefore, the total combinations are $10^5$. The first student can choose between 10 numbers, while the second one can choose between 9 numbers since the first student has already pick one. Following the same idea for the rest of the students the final probability is calculated: 
+\begin{equation}
+  Pr(B) = \frac{10 * 9 * 8 * 7 * 6}{10^5} = \frac{9 * 8 * 7 * 6}{10^4} = 0.3024
+\end{equation}   
+
+\subsection{}
+We define $C$ the event of Fabian getting as a key card Iden's first key card. Given that Fabian initially picks 1 and Iden picks 2, it means that Fabian's first key card is the first card of the 52 face up cards and Iden's is the second one. In order to get Iden's first key card as his next card, Fabian should draw one of the 4 Ace cards since he will proceed one step, where Iden's first card is. The sample space is $\Omega_C = 51 $ since Iden's card can not be chosen. Therefore, the final probability is: 
+\begin{equation}
+  Pr(C) = \frac{4}{51}
+\end{equation}   
+
+\subsection{}
+We define $D$ the event of Fabian getting as a second key card Iden's second key card. Also we define $I_k$ the event of Iden moving k steps and $F_k$ the event of Fabian moving k steps with $k  = {1,...,10$. Given that Fabian initially picks 1 and Iden picks 2, it means that Fabian's first key card is the first card of the 52 face up cards and Iden's is the second one. Since Fabian's first card is one card behind Iden's first card then we have to calculate the probabilities of all the events that Fabian moves one step more than Iden does in order to reach the same second card. After calculating all these probabilities the law of total probability will give the $Pr(D)$ as follows : 
+\begin{equation}
+  Pr(D) = \sum_{i=1}^{9} Pr(F_{i+1} \cap I_i) 
+\end{equation}\\[2cm]    
+
+Calculating each part of (4) as follows :
+\begin{equation*}
+  Pr(F_2 \cap I_1) = \frac{4}{52} * \frac{4}{51} \\
+\end{equation*}
+
+Intuitively, Fabian has 4 chances to draw a "2" out of 52 cards while Iden has 4 chances to draw an Ace out of the remaining 51 cards. 
+However, calculating the $Pr(F_5|I_4)$ is slightly different since Fabian can move 5 steps with 4 different ranks ( 5, K, Q \& J ), so there are 16 out of 52 cards which allows to move 5 steps.So the probability $Pr(F_5|I_4)$ is the following:
+\begin{equation*}
+  Pr(F_5|I_4) = \frac{16}{52} * \frac{4}{51} \\
+\end{equation*}
+The same idea follows the $Pr(F_6|I_5)$ since Iden can move 5 steps with 4 different ranks ( 5, K, Q \& J ) so :
+\begin{equation*}
+  Pr(F_6|I_5) = \frac{4}{52} * \frac{16}{51} \\
+\end{equation*}
+
+So $Pr(D)$ is calculated as:
+
+\begin{equation}
+  Pr(D) = \sum_{i=1}^{9} Pr(F_{i+1} \cap I_i) = 7 * \frac{4}{52}*\frac{4}{51} + 2*\frac{16}{52}*\frac{4}{51} = \frac{240}{2652} \approx 0.09
+\end{equation}
+
+\subsection{}
+ A full house hand is completed when we have 3 of one rank and 2 of an other rank. The number of ranks are 13. We define $E$ the event of forming a full house in the deck.Also we define $C_{n,m}$ the event of choosing the m-th card of rank n where $n={1,2}$ and $ m = {1,2,3}$. For example, $C_{2,1}$ is the event of choosing the second card of the first rank. Therefore, the final probability is: 
+\begin{equation}
+  Pr(E) = 13 * Pr(C_{1,1} \cap C_{2,1} \cap C_{3,1})*12*Pr(C_{1,2} \cap C_{2,2}) 
+\end{equation}
+Calculating each part of (6) as follows :
+\begin{equation*}
+ Pr(C_{1,1} \cap C_{2,1} \cap C_{3,1}) = \frac{4}{52} * \frac{3}{51} * \frac{2}{50},
+ Pr(C_{1,2} \cap C_{2,2}) =  \frac{4}{49} *  \frac{3}{48}
+\end{equation*}
+Intuitively, drawing a card of a rank the sample space for the next card to draw reduces by 1 as well as the total number of cards of the same rank.Moreover, the numbers 13,12 at equation (6) represent the number of possible different ranks for the first and the second one needed for the full house.
+So $Pr(E)$ is calculated as:
+
+\begin{equation}
+  Pr(E) = 13 * Pr(C_{1,1} \cap C_{2,1} \cap C_{3,1})*12*Pr(C_{1,2} \cap C_{2,2})  \approx 0.000144
+\end{equation}
+\end{section}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Chess board}
+
+Two events A and B are independent when $Pr( A \cap B) = Pr(A) * Pr(B)
+\subsection{}
+
+We define $A$ the event that a white square is chosen and $B$ the event that a black square is chosen.Since half squares are black and white respectively then the probabilities of event $A$ and $B$ are the following:
+\begin{equation}
+  Pr(A) = Pr(B) = \frac{32}{64} = \frac{1}{2}
+\end{equation} 
+
+Nevertheless, as neither a black square is part of event A nor a white square is part of event B then $Pr(A \cap B) = 0$. So A and B events are not independent.
+
+\subsection{}
+
+We define $A$ the event that a square from an even numbered row is chosen, so the sample space of event $A$ is $\Omega_A = (n,m)$ where $n={2,4,6,8}$ and $m={1,...,8}$.Also, we define $B$ the event that a square from an even numbered column is chosen, so the sample space of event $B$ is $\Omega_B = (m,n)$. Based on events $A$ and $B$ we assume that the sample space of their intersection $A \cap B$ is $\Omega_{A \cap B} = (n,n)$, so the probabilities of event $A$, $B$ \& $A \cap B$ are the following:
+\begin{equation}
+  Pr(A) = Pr(B) = \frac{32}{64} = \frac{1}{2} \hspace{2cm} Pr(A \cap B) = \frac{16}{64} = \frac{1}{4}
+\end{equation} 
+
+So A and B events are independent since $Pr( A \cap B) = Pr(A) * Pr(B) $.
+
+
+\subsection{}
+
+We define $A$ the event that a white square is chosen. Also, we define $B$ the event that a square from an even numbered column is chosen. From a) and b) questions we know the probabilities $Pr(A)$ and $Pr(B)$. Since the even numbered columns account for the half of a chess board (8x8) and half of them are white (as the squares are alternately colored black and white), so it means that the probability of event $A \cap B$ is the following:
+
+\begin{equation}
+  Pr(A \cap B) = \frac{16}{64} = \frac{1}{4}
+\end{equation} 
+
+So A and B events are independent since $Pr( A \cap B) = Pr(A) * Pr(B) $.
+
+\subsection{}
+
+Three events are mutually independent when each event is independent of any combination of other events in the collection. We define $A$ the event that a square from an even numbered row is chosen. Also, we define $B$ the event that a square from an even numbered column is chosen and $C$ the event that a white square is chosen. From b) question we know that $A$ and $B$ events are independent. From c) question we know that $B$ and $C$ events are independent. If we transpose the chess board and follow the same process as question c) we know that events $A$ and $C$ are independent. Finally, we should proof that $Pr( A \cap B \cap C) = Pr(A) * Pr(B) * Pr(C)$. From b) question we know that the sample space of intersection $A \cap B$ is $\Omega_{A \cap B} = (n,n)$, where $n=(2,4,6,8)$. Since the squares are alternately colored black and white half of them are white so the probability of event $A \cap B \cap C$ is the following:
+\begin{equation}
+  Pr(A \cap B \cap C) = \frac{Pr(A \cap B)}{2} = \frac{1}{8}
+\end{equation} 
+
+So A, B \& C events are mutually independent since $Pr(A \cap B \cap C) = Pr(A) * Pr(B) * Pr(C)$ and pair-wise independent.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{Homework assignments}
+
+
+\subsection{}
+
+\begin{theorem}
+ The homework $k$ I am working on is uniformly distributed over all homework assignments so far.
+\end{theorem}
+\begin{proof} The proof is by induction.
+
+\noindent\textsl{Base case:} We define $W_{i,k}$ the event of working at the i-th homework when k homeworks have been assigned, with $i \leq k$ and $ i,k \in \mathbb{N}$. Prove that the theorem works when $k=1$. It is trivial that $Pr{(W_{1,1})}=1$, which is obviously uniformly distributed since it is the only homework.\\[0.25cm] 
+
+
+\noindent\textsl{Induction step:} For each $k > 1$, assume that the theorem is true for $k$ homework, so it is equally likely to work on each of the $k$ assigned homeworks. Based on this assumption, the probability of working at k-th homework when k homeworks have been assigned is the following:
+\begin{equation}
+  Pr{(W_{k,k})} = \frac{1}{k}
+\end{equation}
+
+In order to prove the induction, the theorem must work for $k+1$ homeworks assigned. In particular, the probability of working at either ($k+1$)-th or $k$-th homework must be the same. The probability of working at $(k+1)$-th homework when $k+1$ homeworks have been assigned is the following: 
+\begin{equation}
+  Pr{(W_{k+1,k+1})} = \frac{1}{k+1}
+\end{equation}
+The probability of remaining working at $k$-th homework when $k+1$ homeworks have been assigned is the following: 
+\begin{equation*}
+  Pr{(W_{k,k+1})} = Pr( \overline{W_{k+1,k+1}} \cap W_{k,k} ) = (1-\frac{1}{k+1})*\frac{1}{k}=\frac{k}{k+1}*\frac{1}{k}= \frac{1}{k+1}
+\end{equation*}
+
+
+Since $Pr{(W_{k+1,k+1})} = Pr{(W_{k,k+1})}$ for each $k\geq 1$ we have proven that it is equally likely to work on any homework assigned so far, which proves the initial theorem.\\[1cm]
+\end{proof}
+
+
+
+
+
+
+
+
+
+\subsection{}
+
+ We denote the distribution of probability of working at $i$-th homework when $k$ homeworks have been assigned as $D(i,k)$
+\begin{theorem}
+  The distribution $D(i,k)$ is the following:
+  \begin{equation*}
+      \[ 
+D(i,k) =  \left\{
+\begin{array}{ll}
+       (\displaystyle \frac{1}{2})^{k-1} & i=1 \\[0.5cm]
+      (\displaystyle \frac{1}{2})^{k-i+1} & i \neq 1\\
+\end{array} 
+\right. 
+\]
+  \end{equation*}
+\end{theorem}
+\begin{proof} The proof is by induction.
+
+\noindent\textsl{Base case:} Prove that the theorem's distribution works when $k=2$. Based on theorem's distribution, the probability of working at either homework is the following:
+\begin{equation*}
+    Pr{(W_{1,2})}=Pr{(W_{2,2})}= \frac{1}{2}
+\end{equation*}
+
+The above probabilities are true since we switch to working on new homework with probability $\frac{1}{2}$.
+
+\noindent\textsl{Induction step:} For each $k > 2$, assume that the theorem's distribution is true, so the probability of working at $i$-th homework when $k$ homeworks have been assigned, is the following:
+  \begin{equation*}
+      \[ 
+D(i,k) =  \left\{
+\begin{array}{ll}
+       (\displaystyle \frac{1}{2})^{k-1} & i=1 \\[0.5cm]
+      (\displaystyle \frac{1}{2})^{k-i+1} & i \neq 1\\
+\end{array} 
+\right. 
+\]
+  \end{equation*}
+
+In order to prove the induction, the theorem must work for $k+1$ homeworks assigned. In particular, the distribution of working at $i$-th homework when $k+1$ homeworks have been assigned is the following: 
+  \begin{equation*}
+      \[ 
+D(i,k+1) =  \left\{
+\begin{array}{ll}
+       (\displaystyle \frac{1}{2})^{(k+1)-1} & i=1 \\[0.5cm]
+      (\displaystyle \frac{1}{2})^{(k+1)-i+1} & i \neq 1\\
+\end{array} =
+\begin{array}{ll}
+       \displaystyle \frac{1}{2} * (\frac{1}{2})^{k-1} & i=1 \\[0.5cm]
+       \displaystyle \frac{1}{2} * (\frac{1}{2})^{k-i+1} & i \neq 1\\
+\end{array}
+=
+\frac{1}{2}*D(i,k)
+\right. 
+\]
+  \end{equation*}
+
+We show that all the probabilites of working at a i-th homework for k+1 assigned homeworks are halved compared to probabilites of working at a i-th homework for k assigned homeworks.Based on this statement and given that switching to the last assigned homework happens with probability equals $\displaystyle \frac{1}{2}$, allows us to state that the sum of all the probabilities of working at a i-th homework for k+1 assigned homeworks equals to 1, which is correct for a PDF distribution.Reaching into a true statement for the distribution of $k+1$ homeworks proves the theorem.
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document} 
